@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Hiragana Uttalsträning med Ljud</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background-color: #fdf6e3;
+      text-align: center;
+    }
+    .card {
+      background-color: #fff;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 80%;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      font-size: 1rem;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hiragana – Uttalsträning (Romaji + Ljud)</h1>
+  <div class="card">
+    <p>Skriv hur ordet uttalas med latinska bokstäver (romaji):</p>
+    <div class="question" id="hiraganaWord">Laddar...</div>
+    <input type="text" id="userInput" placeholder="t.ex. shoujo eller shōjo">
+    <div>
+      <button onclick="checkAnswer()">Kolla</button>
+      <button onclick="showAnswer()">Visa svar</button>
+      <button onclick="playAudio()">🔊 Spela upp</button>
+      <button onclick="newQuestion()">Ny fråga</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const words = [
+      { hiragana: "ねこ", romaji: ["neko"] },
+      { hiragana: "いぬ", romaji: ["inu"] },
+      { hiragana: "みず", romaji: ["mizu"] },
+      { hiragana: "やま", romaji: ["yama"] },
+      { hiragana: "ともだち", romaji: ["tomodachi"] },
+      { hiragana: "はな", romaji: ["hana"] },
+      { hiragana: "そら", romaji: ["sora"] },
+      { hiragana: "くるま", romaji: ["kuruma"] },
+      { hiragana: "ひと", romaji: ["hito"] },
+      { hiragana: "ちず", romaji: ["chizu"] },
+      { hiragana: "しゃしん", romaji: ["shashin"] },
+      { hiragana: "しょうがっこう", romaji: ["shougakkou", "shōgakkō"] },
+      { hiragana: "きゃく", romaji: ["kyaku"] },
+      { hiragana: "ぎゃく", romaji: ["gyaku"] },
+      { hiragana: "ちょう", romaji: ["chou", "chō"] },
+      { hiragana: "ちゃわん", romaji: ["chawan"] },
+      { hiragana: "にゃん", romaji: ["nyan"] },
+      { hiragana: "みょうじ", romaji: ["myouji", "myōji"] },
+      { hiragana: "りょこう", romaji: ["ryokou", "ryokō"] },
+      { hiragana: "びょういん", romaji: ["byouin", "byōin"] },
+      { hiragana: "ひゃく", romaji: ["hyaku"] },
+      { hiragana: "ぴょん", romaji: ["pyon"] },
+      { hiragana: "きょう", romaji: ["kyou", "kyō"] },
+      { hiragana: "ぎょうざ", romaji: ["gyouza", "gyōza"] }
+    ];
+
+    let currentWord = {};
+
+    function newQuestion() {
+      const index = Math.floor(Math.random() * words.length);
+      currentWord = words[index];
+      document.getElementById("hiraganaWord").textContent = currentWord.hiragana;
+      document.getElementById("userInput").value = "";
+      document.getElementById("result").textContent = "";
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("userInput").value.trim().toLowerCase();
+      const result = document.getElementById("result");
+
+      if (currentWord.romaji.includes(input)) {
+        result.textContent = "✅ Rätt!";
+        result.style.color = "green";
+      } else {
+        result.textContent = "❌ Fel. Försök igen eller klicka på 'Visa svar'.";
+        result.style.color = "red";
+      }
+    }
+
+    function showAnswer() {
+      const result = document.getElementById("result");
+      result.textContent = "✔️ Rätt svar: " + currentWord.romaji.join(" eller ");
+      result.style.color = "blue";
+    }
+
+    function playAudio() {
+      const utterance = new SpeechSynthesisUtterance(currentWord.hiragana);
+      utterance.lang = "ja-JP";
+      speechSynthesis.speak(utterance);
+    }
+
+    window.onload = newQuestion;
+  </script>
+</body>
+</html>
